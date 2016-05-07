@@ -51,14 +51,14 @@ namespace RestAPICaller
             if (restAPIResponse.Status == Enums.Status.Success)
             {
                 //Cast the reponse object in success out put object.
-                response.SuccessResponse = JsonConvert.DeserializeObject<ExpectSuccesOutPutObject>(restAPIResponse.ResponseData);
+                response.SuccessResponse = JsonConvert.DeserializeObject<ExpectedSuccesOutPutObject>(restAPIResponse.ResponseData);
                 response.ErrorResponse = null;
             }
             else
             {
                 response.SuccessResponse = null;
                 //Cast the reponse object in error out put object.
-                response.ErrorResponse = JsonConvert.DeserializeObject<ExpectErrorOutPutObject>(restAPIResponse.ResponseData);
+                response.ErrorResponse = JsonConvert.DeserializeObject<ExpectedErrorOutPutObject>(restAPIResponse.ResponseData);
             }
 
             return response;

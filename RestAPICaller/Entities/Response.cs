@@ -10,7 +10,7 @@ namespace AvalaraRestAPIHelper.Entities
     {
         public Enums.Status Status { get; set; }
 
-        public AvalaraSuccessResponse SuccessResponse { get; set; }
-        public AvalaraErrorResponse ErrorResponse { get; set; }
+        public SuccessResponseObject SuccessResponse { get; set; }
+        public ErrorResponseObject ErrorResponse { get; set; }
     }
 }
