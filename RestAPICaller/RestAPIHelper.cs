@@ -34,33 +34,53 @@ namespace AvalaraRestAPIHelper
                 }
             }
 
-            using (var response = (HttpWebResponse)request.GetResponse())
+            try
+            {
+                using (var response = (HttpWebResponse)request.GetResponse())
+                {
+                    RestAPIResponse restAPIResponse = new RestAPIResponse();
+                    var responseValue = string.Empty;
+
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        restAPIResponse.Status = Enums.Status.Failure;
+                    }
+                    else
+                    {
+                        restAPIResponse.Status = Enums.Status.Success;
+                    }
+
+                    // grab the response
+                    using (var responseStream = response.GetResponseStream())
+                    {
+                        if (responseStream != null)
+                            using (var reader = new StreamReader(responseStream))
+                            {
+                                responseValue = reader.ReadToEnd();
+                            }
+                    }
+                    restAPIResponse.ResponseData = responseValue;
+                    return restAPIResponse;
+                }
+            }
+            catch (WebException e)
             {
                 RestAPIResponse restAPIResponse = new RestAPIResponse();
-                var responseValue = string.Empty;
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    restAPIResponse.Status = Enums.Status.Failure;
-                }
-                else
-                {
-                    restAPIResponse.Status = Enums.Status.Success;
-                }
-
                 // grab the response
-                using (var responseStream = response.GetResponseStream())
+                string responseValue = string.Empty;
+                using (var responseStream = e.Response.GetResponseStream())
                 {
                     if (responseStream != null)
                         using (var reader = new StreamReader(responseStream))
                         {
                             responseValue = reader.ReadToEnd();
-                            restAPIResponse.ResponseData = responseValue;
                         }
                 }
-               
+                restAPIResponse.Status = Enums.Status.Failure;
+                restAPIResponse.ResponseData = responseValue;
                 return restAPIResponse;
             }
+            
          }
     }
 }
